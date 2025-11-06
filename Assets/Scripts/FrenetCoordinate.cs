@@ -12,9 +12,18 @@ public class FrenetCoordinate : MonoBehaviour
     public float halfTrackWidth = 0.625f; // Half the width of the track for normalization
     private List<Vector2> waypoints = new List<Vector2>();
 
+    [Tooltip("Drag your main track/environment GameObject here")]
+    public Transform trackOrigin;
+    
 
     void Start()
     {
+        if (trackOrigin == null)
+        {
+            Debug.LogError("Track Origin is not set! Please drag your track's root GameObject onto the 'trackOrigin' slot in the Inspector.", this);
+            return;
+        }
+
         TextAsset lineCoordinateFile = Resources.Load<TextAsset>("track_centerline");
 
         string[] lines = lineCoordinateFile.text.Split('\n');
@@ -37,7 +46,10 @@ public class FrenetCoordinate : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector2 carPosition = new Vector2(transform.position.x, transform.position.z);
+        Vector3 carWorldPosition = transform.position;
+        Vector3 carLocalPosition = trackOrigin.InverseTransformPoint(carWorldPosition);
+        Vector2 carPosition = new Vector2(carLocalPosition.x, carLocalPosition.z);
+
         float minDistance = float.MaxValue;
         int closestSegmentIndex = 0;
         float accumulated_s = 0f;

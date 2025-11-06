@@ -40,6 +40,7 @@ public class F1TenthRacing : Agent
     private bool LapCompletionFlag = false; // Lap completion flag
     private bool CheckpointPassingFlag = false; // Checkpoint passing flag
     private bool LapTimeReducedFlag = false; // Best lap time flag
+    private FrenetCoordinate frenetCoordinator;
 
     void OnCollisionEnter(Collision collision)
     {
@@ -85,12 +86,15 @@ public class F1TenthRacing : Agent
     {
         EV_Rigidbody = gameObject.GetComponent<Rigidbody>();
         // OV_Rigidbody = OpponentVehicle.GetComponent<Rigidbody>();
+        frenetCoordinator = GetComponent<FrenetCoordinate>();
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        EV_Speed = (float)System.Math.Abs(System.Math.Round(EV_ActuatorController.Vehicle.transform.InverseTransformDirection(EV_ActuatorController.Vehicle.GetComponent<Rigidbody>().velocity).z,2));
+        EV_Speed = (float)System.Math.Abs(System.Math.Round(EV_ActuatorController.Vehicle.transform.InverseTransformDirection(EV_ActuatorController.Vehicle.GetComponent<Rigidbody>().velocity).z, 2));
         sensor.AddObservation((float)System.Math.Round(EV_Speed, 2)); // Speed of ego-vehicle (m/s)
+        sensor.AddObservation(frenetCoordinator.normalizedFrenet_S);
+        sensor.AddObservation(frenetCoordinator.normalizedFrenet_D);
     }
 
     public override void OnActionReceived(ActionBuffers actions)
