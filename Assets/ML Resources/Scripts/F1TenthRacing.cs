@@ -93,8 +93,8 @@ public class F1TenthRacing : Agent
     {
         EV_Speed = (float)System.Math.Abs(System.Math.Round(EV_ActuatorController.Vehicle.transform.InverseTransformDirection(EV_ActuatorController.Vehicle.GetComponent<Rigidbody>().velocity).z, 2));
         sensor.AddObservation((float)System.Math.Round(EV_Speed, 2)); // Speed of ego-vehicle (m/s)
-        sensor.AddObservation(frenetCoordinator.normalizedFrenet_S);
-        sensor.AddObservation(frenetCoordinator.normalizedFrenet_D);
+        sensor.AddObservation(frenetCoordinator.Frenet_S);
+        sensor.AddObservation(frenetCoordinator.Frenet_D);
     }
 
     public override void OnActionReceived(ActionBuffers actions)

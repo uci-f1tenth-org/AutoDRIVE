@@ -6,10 +6,7 @@ public class FrenetCoordinate : MonoBehaviour
 {
     public float Frenet_S = 0f;
     public float Frenet_D = 0f;
-    public float normalizedFrenet_S = 0f;
-    public float normalizedFrenet_D = 0f;
     private float totalPathLength = 0f;
-    public float halfTrackWidth = 0.625f; // Half the width of the track for normalization
     private List<Vector2> waypoints = new List<Vector2>();
 
     [Tooltip("Drag your main track/environment GameObject here")]
@@ -105,15 +102,6 @@ public class FrenetCoordinate : MonoBehaviour
 
             // Add this segment's length to the total 's' accumulator
             accumulated_s += segmentLength;
-        }
-        if (totalPathLength > 0)
-        {
-            normalizedFrenet_S = Frenet_S / totalPathLength;
-        }
-        if (halfTrackWidth > 0)
-        {
-            normalizedFrenet_D = Frenet_D / halfTrackWidth;
-            normalizedFrenet_D = Mathf.Clamp(normalizedFrenet_D, -1f, 1f);
         }
     }
 }
